@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
+	import crown from '$lib/images/crown.webp';
+	import crownFallback from '$lib/images/crown.png';
 </script>
 
 <svelte:head>
@@ -11,24 +11,33 @@
 
 <section>
 	<h1>
-		<span class="welcome">
+		<span class="crown">
 			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
+				<source srcset={crown} type="image/webp" />
+				<img src={crownFallback} alt="crown" />
 			</picture>
 		</span>
 
-		to your new<br />SvelteKit app
+		Current King:<br />Janis
 	</h1>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
+	<br />
+	<h2><b>record match</b></h2>
 
-	<Counter />
+	<!-- src/routes/+page.svelte -->
+	<div class="grid grid-cols-3 gap-4">
+		<div class="bg-blue-200 p-4">Select player</div>
+		<div class="p-4">Points king <Counter /></div>
+		<div class="p-4">Points challenger <Counter /></div>
+	</div>
+	<button>submit</button>
+
+	<br />
+	<h2>previous matches</h2>
 </section>
 
 <style>
+
 	section {
 		display: flex;
 		flex-direction: column;
@@ -41,7 +50,7 @@
 		width: 100%;
 	}
 
-	.welcome {
+	.crown {
 		display: block;
 		position: relative;
 		width: 100%;
@@ -49,11 +58,12 @@
 		padding: 0 0 calc(100% * 495 / 2048) 0;
 	}
 
-	.welcome img {
+	.crown img {
 		position: absolute;
 		width: 100%;
 		height: 100%;
 		top: 0;
+		object-fit: contain;
 		display: block;
 	}
 </style>
