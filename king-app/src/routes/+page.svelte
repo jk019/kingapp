@@ -18,7 +18,7 @@
 			</picture>
 		</span>
 
-		Current King:<br />Janis
+		Current King:<br />Janissss
 	</h1>
 
 	<br />
