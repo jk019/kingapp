@@ -32,6 +32,7 @@
 		const result = await res.json();
 		if (result.success) {
 			alert('Spiel gespeichert!');
+			location.reload();
 		} else {
 			alert('Fehler: ' + result.error);
 		}
