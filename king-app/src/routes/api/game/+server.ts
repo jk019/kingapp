@@ -24,6 +24,6 @@ export async function POST(event: RequestEvent) {
     if (error) {
         return json({ success: false, error: error.message }, { status: 500 });
     }
-
     return json({ success: true });
+
 }
