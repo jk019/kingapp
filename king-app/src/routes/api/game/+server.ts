@@ -27,3 +27,13 @@ export async function POST(event: RequestEvent) {
     return json({ success: true });
 
 }
+
+export async function GET() {
+	const { data, error } = await supabase.from("Game").select("*");
+
+	if (error) {
+		return json({ success: false, error: error.message }, { status: 500 });
+	}
+
+	return json({ success: true, data });
+}
