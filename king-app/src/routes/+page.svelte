@@ -39,11 +39,18 @@
 		}
 	}
 
-	async function testdata () {
-		console.log(data);
-	}
 
-	console.log(king);
+
+	async function testfunction() {
+		const res = await fetch('/api/kinggames');
+		const result = await res.json();
+
+		if (result.success) {
+			console.log(result.data); // enthält Kinggames mit Spieler-Infos
+		} else {
+			console.error('API-Fehler:', result.error);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -150,22 +157,20 @@
 		>
 	</table>
 
-	<button onclick={testdata}>
-		trigger request
-	</button>
+	<button onclick={testfunction}> trigger request </button>
 </section>
 
 <style>
 	form .form-fields > * {
-	flex: 0 1 auto;
-}
-form .form-fields select,
-form .form-fields input[type="number"] {
-	width: 8rem;
-}
-form .form-fields label {
-	white-space: nowrap;
-}
+		flex: 0 1 auto;
+	}
+	form .form-fields select,
+	form .form-fields input[type='number'] {
+		width: 8rem;
+	}
+	form .form-fields label {
+		white-space: nowrap;
+	}
 
 	form .form-fields {
 		display: flex;
