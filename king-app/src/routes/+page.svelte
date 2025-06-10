@@ -5,7 +5,8 @@
 	import type { RequestEvent } from '@sveltejs/kit';
 
 	// gets data from server
-	let { data } = $props();
+	/* let { data } = $props(); */
+	export let data;
 
 	let king = data.King;
 
