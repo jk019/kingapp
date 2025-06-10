@@ -38,6 +38,10 @@
 		}
 	}
 
+	async function testdata () {
+		console.log(data);
+	}
+
 	console.log(king);
 </script>
 
@@ -144,6 +148,10 @@
 			{/each}</tbody
 		>
 	</table>
+
+	<button onclick={testdata}>
+		trigger request
+	</button>
 </section>
 
 <style>
