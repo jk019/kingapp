@@ -3,6 +3,7 @@
 	import crown from '$lib/images/crown.webp';
 	import crownFallback from '$lib/images/crown.png';
 	import type { RequestEvent } from '@sveltejs/kit';
+	import type { PageLoad } from './$types';
 
 	// gets data from server
 	/* let { data } = $props(); */
@@ -39,7 +40,20 @@
 		}
 	}
 
+	let kinggames;
+	//get last king-games
+		import { onMount } from 'svelte';
 
+	onMount(async () => {
+		const res = await fetch('/api/kinggames');
+		const result = await res.json();
+
+		if (result.success) {
+			kinggames = result.data;
+		} else {
+			console.error('Fehler:', result.error);
+		}
+	});
 
 	async function testfunction() {
 		const res = await fetch('/api/kinggames');
@@ -146,7 +160,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.PreviousMatches as game}
+			{#each kinggames as game}
 				<tr>
 					<td>{game.player_one.name}</td>
 					<td>{game.score_player_one}</td>
@@ -159,6 +173,8 @@
 
 	<button onclick={testfunction}> trigger request </button>
 </section>
+
+
 
 <style>
 	form .form-fields > * {

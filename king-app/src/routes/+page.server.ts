@@ -9,18 +9,18 @@ export async function load() {
     .select();
 
   // Kinggames abrufen mit Spieler-Infos
-  const { data: kinggames, error: gameError } = await supabase
-    .from("Game")
-    .select(`
-      *,
-      player_one: id_player_one ( id, name ),
-      player_two: id_player_two ( id, name )
-    `)
-    .eq("kinggame", true)
-    .order("created_at", { ascending: false })
-    .limit(10);
+  /*   const { data: kinggames, error: gameError } = await supabase
+      .from("Game")
+      .select(`
+        *,
+        player_one: id_player_one ( id, name ),
+        player_two: id_player_two ( id, name )
+      `)
+      .eq("kinggame", true)
+      .order("created_at", { ascending: false })
+      .limit(10); */
 
- // get current king
+  // get current king
   const { data: currentking, error: kingerror } = await supabase
     .from("Game")
     .select(`
@@ -43,8 +43,8 @@ export async function load() {
     }
   }
 
-  if (playerError || gameError || kingerror) {
-    console.error("Fehler beim Abrufen:", playerError ?? gameError ?? kingerror);
+  if (playerError || kingerror) {
+    console.error("Fehler beim Abrufen:", playerError ?? kingerror);
     return {
       Player: [],
       PreviousMatches: [],
@@ -54,7 +54,6 @@ export async function load() {
 
   return {
     Player: players ?? [],
-    PreviousMatches: kinggames ?? [],
     King: kingName  // <-- hier nur der Name als String
   };
 
