@@ -4,6 +4,7 @@
 	import crownFallback from '$lib/images/crown.png';
 	import type { RequestEvent } from '@sveltejs/kit';
 	import type { PageLoad } from './$types';
+	import { onMount } from 'svelte';
 
 	// gets data from server
 	/* let { data } = $props(); */
@@ -40,9 +41,24 @@
 		}
 	}
 
+	let kingapi;
+	onMount(async () => {
+		const res = await fetch('/api/king');
+		const result = await res.json();
+
+		if (result.success) {
+			kingapi = result.king;
+			console.log("current king: " + kingapi);
+
+		} else {
+			console.error('Fehler:', result.error);
+		}
+	});
+
+
 	let kinggames;
 	//get last king-games
-		import { onMount } from 'svelte';
+	
 
 	onMount(async () => {
 		const res = await fetch('/api/kinggames');
@@ -81,11 +97,7 @@
 			</picture>
 		</span>
 
-		{#if king}
-			{king}
-		{:else}
-			<p>Kein Königsspiel vorhanden.</p>
-		{/if}
+		{kingapi}
 	</h1>
 
 	<br />
@@ -173,8 +185,6 @@
 
 	<button onclick={testfunction}> trigger request </button>
 </section>
-
-
 
 <style>
 	form .form-fields > * {
