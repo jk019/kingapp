@@ -138,10 +138,10 @@
 	<table>
 		<thead>
 			<tr>
-				<th scope="col">Player one</th>
-				<th scope="col">Score player one</th>
-				<th scope="col">Player two</th>
-				<th scope="col">Score player two</th>
+				<th scope="col">King</th>
+				<th scope="col">Score</th>
+				<th scope="col">challenger</th>
+				<th scope="col">Score</th>
 			</tr>
 		</thead>
 		<tbody>
