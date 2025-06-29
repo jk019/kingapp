@@ -10,20 +10,21 @@
 	/* let { data } = $props(); */
 	export let data;
 
-	let king = data.King;
+	//////////////////////////////////////
+	// API - Calls
+	/////////////////////////////////////
 
-	// function to submit data to server
 	async function submitGame(event: SubmitEvent) {
 		event.preventDefault();
 
 		const form = event.target as HTMLFormElement;
 
 		const body = {
-			id_player_one: Number(form.id_player_one.value),
+			id_player_one: currentkingId,
 			id_player_two: Number(form.id_player_two.value),
 			score_player_one: Number(form.score_player_one.value),
 			score_player_two: Number(form.score_player_two.value),
-			kinggame: form.kinggame.checked
+			kinggame: true
 		};
 
 		const res = await fetch('/api/game', {
@@ -41,25 +42,24 @@
 		}
 	}
 
-	let kingapi;
+	// get the current king
+	let currentkingName;
+	let currentkingId;
 	onMount(async () => {
 		const res = await fetch('/api/king');
 		const result = await res.json();
 
 		if (result.success) {
-			kingapi = result.king;
-			console.log("current king: " + kingapi);
-
+			currentkingName = result.king;
+			currentkingId = result.id;
+			console.log('current king: ' + currentkingName);
 		} else {
 			console.error('Fehler:', result.error);
 		}
 	});
 
-
+	// get last 10 king-games
 	let kinggames;
-	//get last king-games
-	
-
 	onMount(async () => {
 		const res = await fetch('/api/kinggames');
 		const result = await res.json();
@@ -70,17 +70,6 @@
 			console.error('Fehler:', result.error);
 		}
 	});
-
-	async function testfunction() {
-		const res = await fetch('/api/kinggames');
-		const result = await res.json();
-
-		if (result.success) {
-			console.log(result.data); // enthält Kinggames mit Spieler-Infos
-		} else {
-			console.error('API-Fehler:', result.error);
-		}
-	}
 </script>
 
 <svelte:head>
@@ -97,71 +86,55 @@
 			</picture>
 		</span>
 
-		{kingapi}
+		{currentkingName}
 	</h1>
 
 	<br />
 </section>
 
 <section>
-	<h2><b>record match </b></h2>
+	<!-- <h2><b>record match </b></h2> -->
 	<form onsubmit={submitGame}>
 		<div class="form-fields">
-			<label for="id_player_one">Player one:</label>
-			<select name="id_player_one" id="id_player_one">
-				<option disabled selected value> -- select player </option>
-				{#each data.Player as Player}
-					<option value={Player.id}>{Player.name}</option>
-				{/each}
-			</select>
-
-			<label for="id_player_two">Player two:</label>
-			<select name="id_player_two" id="id_player_two">
-				<option disabled selected value> -- select player </option>
+			<select name="id_player_two" id="id_player_two" class="cool-select">
+				<option disabled selected value> challenger </option>
 				{#each data.Player as Player}
 					<option value={Player.id}>{Player.name}</option>
 				{/each}
 			</select>
 
 			<label>
-				Score player one:
-				<input name="score_player_one" type="number" required />
+				<!-- Score player one: -->
+				<input
+					class="score-input"
+					placeholder="King"
+					name="score_player_one"
+					type="number"
+					required
+				/>
 			</label>
 
 			<label>
-				Score player two:
-				<input name="score_player_two" type="number" required />
-			</label>
-
-			<label>
-				Kinggame:
-				<input name="kinggame" type="checkbox" />
+				<!-- Score player two: -->
+				<input
+					class="score-input"
+					placeholder="P2"
+					name="score_player_two"
+					type="number"
+					required
+				/>
 			</label>
 		</div>
 
-		<button type="submit">Spiel speichern</button>
+		<!-- Button-Wrapper mit Zentrierung -->
+		<div class="button-wrapper">
+			<button type="submit">Spiel speichern</button>
+		</div>
 	</form>
-
-	<!-- 	<br />
-	<h2><b>record match (future design)</b></h2>
-
-	<div class="grid grid-cols-3 gap-4">
-		<div class="p-4">
-			<label for="cars">Choose a player:</label>
-			<select name="cars" id="cars">
-				{#each data.Player as Player}
-					<option value={Player.name}>{Player.name}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="p-4">Points king <Counter /></div>
-		<div class="p-4">Points challenger <Counter /></div>
-	</div> -->
 </section>
 
 <section>
 	<br />
-	<h2><b>previous king matches</b></h2>
 	<table>
 		<thead>
 			<tr>
@@ -182,11 +155,20 @@
 			{/each}</tbody
 		>
 	</table>
-
-	<button onclick={testfunction}> trigger request </button>
 </section>
 
 <style>
+
+section{
+	padding-bottom: 4%;
+}
+
+	.button-wrapper {
+		display: flex;
+		justify-content: center;
+		margin-top: 1rem;
+	}
+
 	form .form-fields > * {
 		flex: 0 1 auto;
 	}
@@ -208,44 +190,64 @@
 	form button {
 		margin-top: 1rem;
 	}
+table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-family: 'Segoe UI', sans-serif;
+	font-size: 0.9rem;
+	background-color: #f8fafc; /* sehr helles Grau-Blau */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+	border-radius: 12px;
+	overflow: hidden;
+}
 
-	table {
-		border-collapse: collapse;
-		border: 2px solid rgb(140 140 140);
-		font-family: sans-serif;
-		font-size: 0.8rem;
-		letter-spacing: 1px;
-	}
+thead {
+	background-color: #e2e8f0; /* Slate-200 */
+}
 
-	thead {
-		background-color: rgb(228 240 245);
-	}
+th {
+	text-align: left;
+	padding: 12px 16px;
+	color: #1e293b; /* Slate-800 */
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	border-bottom: 2px solid #cbd5e1; /* Slate-300 */
+}
 
-	th,
-	td {
-		border: 1px solid rgb(160 160 160);
-		padding: 8px 10px;
-	}
+td {
+	padding: 12px 16px;
+	color: #334155; /* Slate-700 */
+	border-bottom: 1px solid #e2e8f0;
+}
 
-	td:last-of-type {
-		text-align: center;
-	}
+tbody tr:nth-of-type(even) {
+	background-color: #f1f5f9; /* Slate-100 */
+}
 
-	tbody > tr:nth-of-type(even) {
-		background-color: rgb(237 238 242);
-	}
+tbody tr:hover {
+	background-color: #e0f2fe; /* Light blue on hover */
+	transition: background-color 0.3s;
+}
+
+td:last-of-type,
+th:last-of-type {
+	text-align: center;
+}
+
 
 	button {
 		padding: 0.5rem 1rem;
-		background-color: #1e90ff;
+		background-color: #afb7c3; /* Slate-500 */
 		color: white;
 		border: none;
-		border-radius: 4px;
+		border-radius: 8px;
 		cursor: pointer;
+		transition: background-color 0.3s ease;
 	}
 
 	button:hover {
-		background-color: #1c86ee;
+		background-color: #8c96a5; /* Slate-600 */
 	}
 
 	section {
@@ -275,5 +277,70 @@
 		top: 0;
 		object-fit: contain;
 		display: block;
+	}
+
+	.cool-select {
+		appearance: none;
+		background-color: rgba(255, 255, 255, 0.6);
+		color: #111;
+		padding: 0.6em 2.5em 0.6em 1em;
+		border: none;
+		border-radius: 0.75em;
+		font-size: 1rem;
+		position: relative;
+		cursor: pointer;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+		background-image:
+			linear-gradient(45deg, transparent 50%, #555 50%),
+			linear-gradient(135deg, #555 50%, transparent 50%);
+		background-position:
+			calc(100% - 1.2em) center,
+			calc(100% - 0.9em) center;
+		background-size: 0.5em 0.5em;
+		background-repeat: no-repeat;
+		transition: background 0.3s ease;
+	}
+
+	.cool-select:hover,
+	.cool-select:focus {
+		background-color: rgba(255, 255, 255, 0.75);
+		outline: none;
+	}
+
+	.score-input {
+		appearance: textfield;
+		background-color: rgba(255, 255, 255, 0.6);
+		color: #111;
+		padding: 0.6em 1em;
+		border: none;
+		border-radius: 0.75em;
+		font-size: 1.2rem;
+		font-weight: bold;
+		width: 8rem;
+		text-align: center;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+		transition:
+			background 0.3s ease,
+			transform 0.2s ease;
+	}
+
+	.score-input:focus {
+		outline: none;
+		background-color: rgba(255, 255, 255, 0.75);
+		transform: scale(1.03);
+	}
+
+	/* Remove arrows in number input for Chrome, Safari, Edge */
+	input[type='number']::-webkit-outer-spin-button,
+	input[type='number']::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Remove arrows in Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
 	}
 </style>

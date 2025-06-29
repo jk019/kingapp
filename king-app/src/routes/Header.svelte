@@ -6,7 +6,7 @@
 
 <header>
 	<div class="corner">
-		links oben
+		<!-- links oben -->
 	</div>
 
 	<nav>
@@ -31,7 +31,7 @@
 	</nav>
 
 	<div class="corner">
-		rechts oben
+		<!-- rechts oben -->
 	</div>
 </header>
 
